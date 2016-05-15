@@ -206,7 +206,7 @@ hr {
 <body>
 <h1>run_analysis</h1>
 
-<p>Last updated 2016-05-16 00:57:19 using R version 3.2.4 (2016-03-10).</p>
+<p>Last updated 2016-05-16 01:35:45 using R version 3.2.4 (2016-03-10).</p>
 
 <h2>Instructions for project</h2>
 
@@ -244,16 +244,23 @@ hr {
 sapply(packages, require, character.only=TRUE, quietly=TRUE)
 </code></pre>
 
-<pre><code>## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : aucun package nomm&lt;e9&gt; &#39;data.table&#39; n&#39;est trouv&lt;e9&gt;
+<pre><code>## data.table 1.9.6  For help type ?data.table or https://github.com/Rdatatable/data.table/wiki
 </code></pre>
 
-<pre><code>## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : aucun package nomm&lt;e9&gt; &#39;reshape2&#39; n&#39;est trouv&lt;e9&gt;
+<pre><code>## The fastest way to learn (by data.table authors): https://www.datacamp.com/courses/data-analysis-the-data-table-way
+</code></pre>
+
+<pre><code>## 
+## Attachement du package : &#39;reshape2&#39;
+</code></pre>
+
+<pre><code>## The following objects are masked from &#39;package:data.table&#39;:
+## 
+##     dcast, melt
 </code></pre>
 
 <pre><code>## data.table   reshape2 
-##      FALSE      FALSE
+##       TRUE       TRUE
 </code></pre>
 
 <p>Set path.</p>
@@ -289,7 +296,34 @@ system(cmd)
 list.files(pathIn, recursive=TRUE)
 </code></pre>
 
-<pre><code>## character(0)
+<pre><code>##  [1] &quot;activity_labels.txt&quot;                         
+##  [2] &quot;features_info.txt&quot;                           
+##  [3] &quot;features.txt&quot;                                
+##  [4] &quot;README.txt&quot;                                  
+##  [5] &quot;test/Inertial Signals/body_acc_x_test.txt&quot;   
+##  [6] &quot;test/Inertial Signals/body_acc_y_test.txt&quot;   
+##  [7] &quot;test/Inertial Signals/body_acc_z_test.txt&quot;   
+##  [8] &quot;test/Inertial Signals/body_gyro_x_test.txt&quot;  
+##  [9] &quot;test/Inertial Signals/body_gyro_y_test.txt&quot;  
+## [10] &quot;test/Inertial Signals/body_gyro_z_test.txt&quot;  
+## [11] &quot;test/Inertial Signals/total_acc_x_test.txt&quot;  
+## [12] &quot;test/Inertial Signals/total_acc_y_test.txt&quot;  
+## [13] &quot;test/Inertial Signals/total_acc_z_test.txt&quot;  
+## [14] &quot;test/subject_test.txt&quot;                       
+## [15] &quot;test/X_test.txt&quot;                             
+## [16] &quot;test/y_test.txt&quot;                             
+## [17] &quot;train/Inertial Signals/body_acc_x_train.txt&quot; 
+## [18] &quot;train/Inertial Signals/body_acc_y_train.txt&quot; 
+## [19] &quot;train/Inertial Signals/body_acc_z_train.txt&quot; 
+## [20] &quot;train/Inertial Signals/body_gyro_x_train.txt&quot;
+## [21] &quot;train/Inertial Signals/body_gyro_y_train.txt&quot;
+## [22] &quot;train/Inertial Signals/body_gyro_z_train.txt&quot;
+## [23] &quot;train/Inertial Signals/total_acc_x_train.txt&quot;
+## [24] &quot;train/Inertial Signals/total_acc_y_train.txt&quot;
+## [25] &quot;train/Inertial Signals/total_acc_z_train.txt&quot;
+## [26] &quot;train/subject_train.txt&quot;                     
+## [27] &quot;train/X_train.txt&quot;                           
+## [28] &quot;train/y_train.txt&quot;
 </code></pre>
 
 <p><strong>See the <code>README.txt</code> file in /Users/joseph/Desktop/DataScience/C4W4/Project for detailed information on the dataset.</strong></p>
@@ -301,29 +335,13 @@ list.files(pathIn, recursive=TRUE)
 <p>Read the subject files.</p>
 
 <pre><code class="r">dtSubjectTrain &lt;- fread(file.path(pathIn, &quot;train&quot;, &quot;subject_train.txt&quot;))
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;fread&quot;
-</code></pre>
-
-<pre><code class="r">dtSubjectTest  &lt;- fread(file.path(pathIn, &quot;test&quot; , &quot;subject_test.txt&quot; ))
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;fread&quot;
+dtSubjectTest  &lt;- fread(file.path(pathIn, &quot;test&quot; , &quot;subject_test.txt&quot; ))
 </code></pre>
 
 <p>Read the activity files. For some reason, these are called <em>label</em> files in the <code>README.txt</code> documentation.</p>
 
 <pre><code class="r">dtActivityTrain &lt;- fread(file.path(pathIn, &quot;train&quot;, &quot;Y_train.txt&quot;))
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;fread&quot;
-</code></pre>
-
-<pre><code class="r">dtActivityTest  &lt;- fread(file.path(pathIn, &quot;test&quot; , &quot;Y_test.txt&quot; ))
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;fread&quot;
+dtActivityTest  &lt;- fread(file.path(pathIn, &quot;test&quot; , &quot;Y_test.txt&quot; ))
 </code></pre>
 
 <p>Read the data files. <code>fread</code> seems to be giving me some trouble reading files. Using a helper function, read the file with <code>read.table</code> instead, then convert the resulting data frame to a data table. Return the data table.</p>
@@ -333,25 +351,7 @@ list.files(pathIn, recursive=TRUE)
     dt &lt;- data.table(df)
 }
 dtTrain &lt;- fileToDataTable(file.path(pathIn, &quot;train&quot;, &quot;X_train.txt&quot;))
-</code></pre>
-
-<pre><code>## Warning in file(file, &quot;rt&quot;): impossible d&#39;ouvrir le fichier &#39;/Users/joseph/
-## Desktop/DataScience/C4W4/Project/UCI HAR Dataset/train/X_train.txt&#39; : No
-## such file or directory
-</code></pre>
-
-<pre><code>## Error in file(file, &quot;rt&quot;): impossible d&#39;ouvrir la connexion
-</code></pre>
-
-<pre><code class="r">dtTest  &lt;- fileToDataTable(file.path(pathIn, &quot;test&quot; , &quot;X_test.txt&quot; ))
-</code></pre>
-
-<pre><code>## Warning in file(file, &quot;rt&quot;): impossible d&#39;ouvrir le fichier &#39;/Users/joseph/
-## Desktop/DataScience/C4W4/Project/UCI HAR Dataset/test/X_test.txt&#39; : No such
-## file or directory
-</code></pre>
-
-<pre><code>## Error in file(file, &quot;rt&quot;): impossible d&#39;ouvrir la connexion
+dtTest  &lt;- fileToDataTable(file.path(pathIn, &quot;test&quot; , &quot;X_test.txt&quot; ))
 </code></pre>
 
 <h2>Merge the training and the test sets</h2>
@@ -359,47 +359,16 @@ dtTrain &lt;- fileToDataTable(file.path(pathIn, &quot;train&quot;, &quot;X_train
 <p>Concatenate the data tables.</p>
 
 <pre><code class="r">dtSubject &lt;- rbind(dtSubjectTrain, dtSubjectTest)
-</code></pre>
-
-<pre><code>## Error in rbind(dtSubjectTrain, dtSubjectTest): objet &#39;dtSubjectTrain&#39; introuvable
-</code></pre>
-
-<pre><code class="r">setnames(dtSubject, &quot;V1&quot;, &quot;subject&quot;)
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;setnames&quot;
-</code></pre>
-
-<pre><code class="r">dtActivity &lt;- rbind(dtActivityTrain, dtActivityTest)
-</code></pre>
-
-<pre><code>## Error in rbind(dtActivityTrain, dtActivityTest): objet &#39;dtActivityTrain&#39; introuvable
-</code></pre>
-
-<pre><code class="r">setnames(dtActivity, &quot;V1&quot;, &quot;activityNum&quot;)
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;setnames&quot;
-</code></pre>
-
-<pre><code class="r">dt &lt;- rbind(dtTrain, dtTest)
-</code></pre>
-
-<pre><code>## Error in rbind(dtTrain, dtTest): objet &#39;dtTrain&#39; introuvable
+setnames(dtSubject, &quot;V1&quot;, &quot;subject&quot;)
+dtActivity &lt;- rbind(dtActivityTrain, dtActivityTest)
+setnames(dtActivity, &quot;V1&quot;, &quot;activityNum&quot;)
+dt &lt;- rbind(dtTrain, dtTest)
 </code></pre>
 
 <p>Merge columns.</p>
 
 <pre><code class="r">dtSubject &lt;- cbind(dtSubject, dtActivity)
-</code></pre>
-
-<pre><code>## Error in cbind(dtSubject, dtActivity): objet &#39;dtSubject&#39; introuvable
-</code></pre>
-
-<pre><code class="r">dt &lt;- cbind(dtSubject, dt)
-</code></pre>
-
-<pre><code>## Error in cbind(dtSubject, dt): objet &#39;dtSubject&#39; introuvable
+dt &lt;- cbind(dtSubject, dt)
 </code></pre>
 
 <p>Set key.</p>
@@ -407,23 +376,12 @@ dtTrain &lt;- fileToDataTable(file.path(pathIn, &quot;train&quot;, &quot;X_train
 <pre><code class="r">setkey(dt, subject, activityNum)
 </code></pre>
 
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;setkey&quot;
-</code></pre>
-
 <h2>Extract only the mean and standard deviation</h2>
 
 <p>Read the <code>features.txt</code> file. This tells which variables in <code>dt</code> are measurements for the mean and standard deviation.</p>
 
 <pre><code class="r">dtFeatures &lt;- fread(file.path(pathIn, &quot;features.txt&quot;))
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;fread&quot;
-</code></pre>
-
-<pre><code class="r">setnames(dtFeatures, names(dtFeatures), c(&quot;featureNum&quot;, &quot;featureName&quot;))
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;setnames&quot;
+setnames(dtFeatures, names(dtFeatures), c(&quot;featureNum&quot;, &quot;featureName&quot;))
 </code></pre>
 
 <p>Subset only measurements for the mean and standard deviation.</p>
@@ -431,41 +389,37 @@ dtTrain &lt;- fileToDataTable(file.path(pathIn, &quot;train&quot;, &quot;X_train
 <pre><code class="r">dtFeatures &lt;- dtFeatures[grepl(&quot;mean\\(\\)|std\\(\\)&quot;, featureName)]
 </code></pre>
 
-<pre><code>## Error in eval(expr, envir, enclos): objet &#39;dtFeatures&#39; introuvable
-</code></pre>
-
 <p>Convert the column numbers to a vector of variable names matching columns in <code>dt</code>.</p>
 
 <pre><code class="r">dtFeatures$featureCode &lt;- dtFeatures[, paste0(&quot;V&quot;, featureNum)]
+head(dtFeatures)
 </code></pre>
 
-<pre><code>## Error in eval(expr, envir, enclos): objet &#39;dtFeatures&#39; introuvable
-</code></pre>
-
-<pre><code class="r">head(dtFeatures)
-</code></pre>
-
-<pre><code>## Error in head(dtFeatures): objet &#39;dtFeatures&#39; introuvable
+<pre><code>##    featureNum       featureName featureCode
+## 1:          1 tBodyAcc-mean()-X          V1
+## 2:          2 tBodyAcc-mean()-Y          V2
+## 3:          3 tBodyAcc-mean()-Z          V3
+## 4:          4  tBodyAcc-std()-X          V4
+## 5:          5  tBodyAcc-std()-Y          V5
+## 6:          6  tBodyAcc-std()-Z          V6
 </code></pre>
 
 <pre><code class="r">dtFeatures$featureCode
 </code></pre>
 
-<pre><code>## Error in eval(expr, envir, enclos): objet &#39;dtFeatures&#39; introuvable
+<pre><code>##  [1] &quot;V1&quot;   &quot;V2&quot;   &quot;V3&quot;   &quot;V4&quot;   &quot;V5&quot;   &quot;V6&quot;   &quot;V41&quot;  &quot;V42&quot;  &quot;V43&quot;  &quot;V44&quot; 
+## [11] &quot;V45&quot;  &quot;V46&quot;  &quot;V81&quot;  &quot;V82&quot;  &quot;V83&quot;  &quot;V84&quot;  &quot;V85&quot;  &quot;V86&quot;  &quot;V121&quot; &quot;V122&quot;
+## [21] &quot;V123&quot; &quot;V124&quot; &quot;V125&quot; &quot;V126&quot; &quot;V161&quot; &quot;V162&quot; &quot;V163&quot; &quot;V164&quot; &quot;V165&quot; &quot;V166&quot;
+## [31] &quot;V201&quot; &quot;V202&quot; &quot;V214&quot; &quot;V215&quot; &quot;V227&quot; &quot;V228&quot; &quot;V240&quot; &quot;V241&quot; &quot;V253&quot; &quot;V254&quot;
+## [41] &quot;V266&quot; &quot;V267&quot; &quot;V268&quot; &quot;V269&quot; &quot;V270&quot; &quot;V271&quot; &quot;V345&quot; &quot;V346&quot; &quot;V347&quot; &quot;V348&quot;
+## [51] &quot;V349&quot; &quot;V350&quot; &quot;V424&quot; &quot;V425&quot; &quot;V426&quot; &quot;V427&quot; &quot;V428&quot; &quot;V429&quot; &quot;V503&quot; &quot;V504&quot;
+## [61] &quot;V516&quot; &quot;V517&quot; &quot;V529&quot; &quot;V530&quot; &quot;V542&quot; &quot;V543&quot;
 </code></pre>
 
 <p>Subset these variables using variable names.</p>
 
 <pre><code class="r">select &lt;- c(key(dt), dtFeatures$featureCode)
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;key&quot;
-</code></pre>
-
-<pre><code class="r">dt &lt;- dt[, select, with=FALSE]
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): objet &#39;select&#39; introuvable
+dt &lt;- dt[, select, with=FALSE]
 </code></pre>
 
 <h2>Use descriptive activity names</h2>
@@ -473,15 +427,7 @@ dtTrain &lt;- fileToDataTable(file.path(pathIn, &quot;train&quot;, &quot;X_train
 <p>Read <code>activity_labels.txt</code> file. This will be used to add descriptive names to the activities.</p>
 
 <pre><code class="r">dtActivityNames &lt;- fread(file.path(pathIn, &quot;activity_labels.txt&quot;))
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;fread&quot;
-</code></pre>
-
-<pre><code class="r">setnames(dtActivityNames, names(dtActivityNames), c(&quot;activityNum&quot;, &quot;activityName&quot;))
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;setnames&quot;
+setnames(dtActivityNames, names(dtActivityNames), c(&quot;activityNum&quot;, &quot;activityName&quot;))
 </code></pre>
 
 <h2>Label with descriptive activity names</h2>
@@ -491,15 +437,9 @@ dtTrain &lt;- fileToDataTable(file.path(pathIn, &quot;train&quot;, &quot;X_train
 <pre><code class="r">dt &lt;- merge(dt, dtActivityNames, by=&quot;activityNum&quot;, all.x=TRUE)
 </code></pre>
 
-<pre><code>## Error in as.data.frame.default(x): impossible de convertir automatiquement la classe  &quot;&quot;function&quot;&quot; en un tableau de donn&lt;e9&gt;es (data.frame)
-</code></pre>
-
 <p>Add <code>activityName</code> as a key.</p>
 
 <pre><code class="r">setkey(dt, subject, activityNum, activityName)
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;setkey&quot;
 </code></pre>
 
 <p>Melt the data table to reshape it from a short and wide format to a tall and narrow format.</p>
@@ -507,30 +447,16 @@ dtTrain &lt;- fileToDataTable(file.path(pathIn, &quot;train&quot;, &quot;X_train
 <pre><code class="r">dt &lt;- data.table(melt(dt, key(dt), variable.name=&quot;featureCode&quot;))
 </code></pre>
 
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;data.table&quot;
-</code></pre>
-
 <p>Merge activity name.</p>
 
 <pre><code class="r">dt &lt;- merge(dt, dtFeatures[, list(featureNum, featureCode, featureName)], by=&quot;featureCode&quot;, all.x=TRUE)
-</code></pre>
-
-<pre><code>## Error in as.data.frame.default(x): impossible de convertir automatiquement la classe  &quot;&quot;function&quot;&quot; en un tableau de donn&lt;e9&gt;es (data.frame)
 </code></pre>
 
 <p>Create a new variable, <code>activity</code> that is equivalent to <code>activityName</code> as a factor class.
 Create a new variable, <code>feature</code> that is equivalent to <code>featureName</code> as a factor class.</p>
 
 <pre><code class="r">dt$activity &lt;- factor(dt$activityName)
-</code></pre>
-
-<pre><code>## Error in dt$activityName: objet de type &#39;closure&#39; non indi&lt;e7&gt;able
-</code></pre>
-
-<pre><code class="r">dt$feature &lt;- factor(dt$featureName)
-</code></pre>
-
-<pre><code>## Error in dt$featureName: objet de type &#39;closure&#39; non indi&lt;e7&gt;able
+dt$feature &lt;- factor(dt$featureName)
 </code></pre>
 
 <p>Seperate features from <code>featureName</code> using the helper function <code>grepthis</code>.</p>
@@ -542,99 +468,31 @@ Create a new variable, <code>feature</code> that is equivalent to <code>featureN
 n &lt;- 2
 y &lt;- matrix(seq(1, n), nrow=n)
 x &lt;- matrix(c(grepthis(&quot;^t&quot;), grepthis(&quot;^f&quot;)), ncol=nrow(y))
-</code></pre>
-
-<pre><code>## Error in dt$feature: objet de type &#39;closure&#39; non indi&lt;e7&gt;able
-</code></pre>
-
-<pre><code class="r">dt$featDomain &lt;- factor(x %*% y, labels=c(&quot;Time&quot;, &quot;Freq&quot;))
-</code></pre>
-
-<pre><code>## Error in factor(x %*% y, labels = c(&quot;Time&quot;, &quot;Freq&quot;)): objet &#39;x&#39; introuvable
-</code></pre>
-
-<pre><code class="r">x &lt;- matrix(c(grepthis(&quot;Acc&quot;), grepthis(&quot;Gyro&quot;)), ncol=nrow(y))
-</code></pre>
-
-<pre><code>## Error in dt$feature: objet de type &#39;closure&#39; non indi&lt;e7&gt;able
-</code></pre>
-
-<pre><code class="r">dt$featInstrument &lt;- factor(x %*% y, labels=c(&quot;Accelerometer&quot;, &quot;Gyroscope&quot;))
-</code></pre>
-
-<pre><code>## Error in factor(x %*% y, labels = c(&quot;Accelerometer&quot;, &quot;Gyroscope&quot;)): objet &#39;x&#39; introuvable
-</code></pre>
-
-<pre><code class="r">x &lt;- matrix(c(grepthis(&quot;BodyAcc&quot;), grepthis(&quot;GravityAcc&quot;)), ncol=nrow(y))
-</code></pre>
-
-<pre><code>## Error in dt$feature: objet de type &#39;closure&#39; non indi&lt;e7&gt;able
-</code></pre>
-
-<pre><code class="r">dt$featAcceleration &lt;- factor(x %*% y, labels=c(NA, &quot;Body&quot;, &quot;Gravity&quot;))
-</code></pre>
-
-<pre><code>## Error in factor(x %*% y, labels = c(NA, &quot;Body&quot;, &quot;Gravity&quot;)): objet &#39;x&#39; introuvable
-</code></pre>
-
-<pre><code class="r">x &lt;- matrix(c(grepthis(&quot;mean()&quot;), grepthis(&quot;std()&quot;)), ncol=nrow(y))
-</code></pre>
-
-<pre><code>## Error in dt$feature: objet de type &#39;closure&#39; non indi&lt;e7&gt;able
-</code></pre>
-
-<pre><code class="r">dt$featVariable &lt;- factor(x %*% y, labels=c(&quot;Mean&quot;, &quot;SD&quot;))
-</code></pre>
-
-<pre><code>## Error in factor(x %*% y, labels = c(&quot;Mean&quot;, &quot;SD&quot;)): objet &#39;x&#39; introuvable
-</code></pre>
-
-<pre><code class="r">## Features with 1 category
+dt$featDomain &lt;- factor(x %*% y, labels=c(&quot;Time&quot;, &quot;Freq&quot;))
+x &lt;- matrix(c(grepthis(&quot;Acc&quot;), grepthis(&quot;Gyro&quot;)), ncol=nrow(y))
+dt$featInstrument &lt;- factor(x %*% y, labels=c(&quot;Accelerometer&quot;, &quot;Gyroscope&quot;))
+x &lt;- matrix(c(grepthis(&quot;BodyAcc&quot;), grepthis(&quot;GravityAcc&quot;)), ncol=nrow(y))
+dt$featAcceleration &lt;- factor(x %*% y, labels=c(NA, &quot;Body&quot;, &quot;Gravity&quot;))
+x &lt;- matrix(c(grepthis(&quot;mean()&quot;), grepthis(&quot;std()&quot;)), ncol=nrow(y))
+dt$featVariable &lt;- factor(x %*% y, labels=c(&quot;Mean&quot;, &quot;SD&quot;))
+## Features with 1 category
 dt$featJerk &lt;- factor(grepthis(&quot;Jerk&quot;), labels=c(NA, &quot;Jerk&quot;))
-</code></pre>
-
-<pre><code>## Error in dt$feature: objet de type &#39;closure&#39; non indi&lt;e7&gt;able
-</code></pre>
-
-<pre><code class="r">dt$featMagnitude &lt;- factor(grepthis(&quot;Mag&quot;), labels=c(NA, &quot;Magnitude&quot;))
-</code></pre>
-
-<pre><code>## Error in dt$feature: objet de type &#39;closure&#39; non indi&lt;e7&gt;able
-</code></pre>
-
-<pre><code class="r">## Features with 3 categories
+dt$featMagnitude &lt;- factor(grepthis(&quot;Mag&quot;), labels=c(NA, &quot;Magnitude&quot;))
+## Features with 3 categories
 n &lt;- 3
 y &lt;- matrix(seq(1, n), nrow=n)
 x &lt;- matrix(c(grepthis(&quot;-X&quot;), grepthis(&quot;-Y&quot;), grepthis(&quot;-Z&quot;)), ncol=nrow(y))
-</code></pre>
-
-<pre><code>## Error in dt$feature: objet de type &#39;closure&#39; non indi&lt;e7&gt;able
-</code></pre>
-
-<pre><code class="r">dt$featAxis &lt;- factor(x %*% y, labels=c(NA, &quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;))
-</code></pre>
-
-<pre><code>## Error in factor(x %*% y, labels = c(NA, &quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;)): objet &#39;x&#39; introuvable
+dt$featAxis &lt;- factor(x %*% y, labels=c(NA, &quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;))
 </code></pre>
 
 <p>Check to make sure all possible combinations of <code>feature</code> are accounted for by all possible combinations of the factor class variables.</p>
 
 <pre><code class="r">r1 &lt;- nrow(dt[, .N, by=c(&quot;feature&quot;)])
+r2 &lt;- nrow(dt[, .N, by=c(&quot;featDomain&quot;, &quot;featAcceleration&quot;, &quot;featInstrument&quot;, &quot;featJerk&quot;, &quot;featMagnitude&quot;, &quot;featVariable&quot;, &quot;featAxis&quot;)])
+r1 == r2
 </code></pre>
 
-<pre><code>## Error in nrow(dt[, .N, by = c(&quot;feature&quot;)]): objet &#39;.N&#39; introuvable
-</code></pre>
-
-<pre><code class="r">r2 &lt;- nrow(dt[, .N, by=c(&quot;featDomain&quot;, &quot;featAcceleration&quot;, &quot;featInstrument&quot;, &quot;featJerk&quot;, &quot;featMagnitude&quot;, &quot;featVariable&quot;, &quot;featAxis&quot;)])
-</code></pre>
-
-<pre><code>## Error in nrow(dt[, .N, by = c(&quot;featDomain&quot;, &quot;featAcceleration&quot;, &quot;featInstrument&quot;, : objet &#39;.N&#39; introuvable
-</code></pre>
-
-<pre><code class="r">r1 == r2
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): objet &#39;r1&#39; introuvable
+<pre><code>## [1] TRUE
 </code></pre>
 
 <p>Yes, I accounted for all possible combinations. <code>feature</code> is now redundant.</p>
@@ -644,15 +502,7 @@ x &lt;- matrix(c(grepthis(&quot;-X&quot;), grepthis(&quot;-Y&quot;), grepthis(&q
 <p>Create a data set with the average of each variable for each activity and each subject.</p>
 
 <pre><code class="r">setkey(dt, subject, activity, featDomain, featAcceleration, featInstrument, featJerk, featMagnitude, featVariable, featAxis)
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): impossible de trouver la fonction &quot;setkey&quot;
-</code></pre>
-
-<pre><code class="r">dtTidy &lt;- dt[, list(count = .N, average = mean(value)), by=key(dt)]
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): objet &#39;.N&#39; introuvable
+dtTidy &lt;- dt[, list(count = .N, average = mean(value)), by=key(dt)]
 </code></pre>
 
 <p>Make codebook.</p>

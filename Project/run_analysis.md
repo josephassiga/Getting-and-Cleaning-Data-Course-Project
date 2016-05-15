@@ -1,6 +1,6 @@
 run_analysis
 ============
-Last updated 2016-05-16 00:57:19 using R version 3.2.4 (2016-03-10).
+Last updated 2016-05-16 01:35:45 using R version 3.2.4 (2016-03-10).
 
 
 Instructions for project
@@ -41,18 +41,27 @@ sapply(packages, require, character.only=TRUE, quietly=TRUE)
 ```
 
 ```
-## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : aucun package nommé 'data.table' n'est trouvé
+## data.table 1.9.6  For help type ?data.table or https://github.com/Rdatatable/data.table/wiki
 ```
 
 ```
-## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : aucun package nommé 'reshape2' n'est trouvé
+## The fastest way to learn (by data.table authors): https://www.datacamp.com/courses/data-analysis-the-data-table-way
+```
+
+```
+## 
+## Attachement du package : 'reshape2'
+```
+
+```
+## The following objects are masked from 'package:data.table':
+## 
+##     dcast, melt
 ```
 
 ```
 ## data.table   reshape2 
-##      FALSE      FALSE
+##       TRUE       TRUE
 ```
 
 Set path.
@@ -100,7 +109,34 @@ list.files(pathIn, recursive=TRUE)
 ```
 
 ```
-## character(0)
+##  [1] "activity_labels.txt"                         
+##  [2] "features_info.txt"                           
+##  [3] "features.txt"                                
+##  [4] "README.txt"                                  
+##  [5] "test/Inertial Signals/body_acc_x_test.txt"   
+##  [6] "test/Inertial Signals/body_acc_y_test.txt"   
+##  [7] "test/Inertial Signals/body_acc_z_test.txt"   
+##  [8] "test/Inertial Signals/body_gyro_x_test.txt"  
+##  [9] "test/Inertial Signals/body_gyro_y_test.txt"  
+## [10] "test/Inertial Signals/body_gyro_z_test.txt"  
+## [11] "test/Inertial Signals/total_acc_x_test.txt"  
+## [12] "test/Inertial Signals/total_acc_y_test.txt"  
+## [13] "test/Inertial Signals/total_acc_z_test.txt"  
+## [14] "test/subject_test.txt"                       
+## [15] "test/X_test.txt"                             
+## [16] "test/y_test.txt"                             
+## [17] "train/Inertial Signals/body_acc_x_train.txt" 
+## [18] "train/Inertial Signals/body_acc_y_train.txt" 
+## [19] "train/Inertial Signals/body_acc_z_train.txt" 
+## [20] "train/Inertial Signals/body_gyro_x_train.txt"
+## [21] "train/Inertial Signals/body_gyro_y_train.txt"
+## [22] "train/Inertial Signals/body_gyro_z_train.txt"
+## [23] "train/Inertial Signals/total_acc_x_train.txt"
+## [24] "train/Inertial Signals/total_acc_y_train.txt"
+## [25] "train/Inertial Signals/total_acc_z_train.txt"
+## [26] "train/subject_train.txt"                     
+## [27] "train/X_train.txt"                           
+## [28] "train/y_train.txt"
 ```
 
 **See the `README.txt` file in /Users/joseph/Desktop/DataScience/C4W4/Project for detailed information on the dataset.**
@@ -116,18 +152,7 @@ Read the subject files.
 
 ```r
 dtSubjectTrain <- fread(file.path(pathIn, "train", "subject_train.txt"))
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "fread"
-```
-
-```r
 dtSubjectTest  <- fread(file.path(pathIn, "test" , "subject_test.txt" ))
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "fread"
 ```
 
 Read the activity files. For some reason, these are called *label* files in the `README.txt` documentation.
@@ -135,18 +160,7 @@ Read the activity files. For some reason, these are called *label* files in the 
 
 ```r
 dtActivityTrain <- fread(file.path(pathIn, "train", "Y_train.txt"))
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "fread"
-```
-
-```r
 dtActivityTest  <- fread(file.path(pathIn, "test" , "Y_test.txt" ))
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "fread"
 ```
 
 Read the data files. `fread` seems to be giving me some trouble reading files. Using a helper function, read the file with `read.table` instead, then convert the resulting data frame to a data table. Return the data table.
@@ -158,30 +172,7 @@ fileToDataTable <- function (f) {
 	dt <- data.table(df)
 }
 dtTrain <- fileToDataTable(file.path(pathIn, "train", "X_train.txt"))
-```
-
-```
-## Warning in file(file, "rt"): impossible d'ouvrir le fichier '/Users/joseph/
-## Desktop/DataScience/C4W4/Project/UCI HAR Dataset/train/X_train.txt' : No
-## such file or directory
-```
-
-```
-## Error in file(file, "rt"): impossible d'ouvrir la connexion
-```
-
-```r
 dtTest  <- fileToDataTable(file.path(pathIn, "test" , "X_test.txt" ))
-```
-
-```
-## Warning in file(file, "rt"): impossible d'ouvrir le fichier '/Users/joseph/
-## Desktop/DataScience/C4W4/Project/UCI HAR Dataset/test/X_test.txt' : No such
-## file or directory
-```
-
-```
-## Error in file(file, "rt"): impossible d'ouvrir la connexion
 ```
 
 
@@ -193,42 +184,10 @@ Concatenate the data tables.
 
 ```r
 dtSubject <- rbind(dtSubjectTrain, dtSubjectTest)
-```
-
-```
-## Error in rbind(dtSubjectTrain, dtSubjectTest): objet 'dtSubjectTrain' introuvable
-```
-
-```r
 setnames(dtSubject, "V1", "subject")
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "setnames"
-```
-
-```r
 dtActivity <- rbind(dtActivityTrain, dtActivityTest)
-```
-
-```
-## Error in rbind(dtActivityTrain, dtActivityTest): objet 'dtActivityTrain' introuvable
-```
-
-```r
 setnames(dtActivity, "V1", "activityNum")
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "setnames"
-```
-
-```r
 dt <- rbind(dtTrain, dtTest)
-```
-
-```
-## Error in rbind(dtTrain, dtTest): objet 'dtTrain' introuvable
 ```
 
 Merge columns.
@@ -236,18 +195,7 @@ Merge columns.
 
 ```r
 dtSubject <- cbind(dtSubject, dtActivity)
-```
-
-```
-## Error in cbind(dtSubject, dtActivity): objet 'dtSubject' introuvable
-```
-
-```r
 dt <- cbind(dtSubject, dt)
-```
-
-```
-## Error in cbind(dtSubject, dt): objet 'dtSubject' introuvable
 ```
 
 Set key.
@@ -255,10 +203,6 @@ Set key.
 
 ```r
 setkey(dt, subject, activityNum)
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "setkey"
 ```
 
 
@@ -270,18 +214,7 @@ Read the `features.txt` file. This tells which variables in `dt` are measurement
 
 ```r
 dtFeatures <- fread(file.path(pathIn, "features.txt"))
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "fread"
-```
-
-```r
 setnames(dtFeatures, names(dtFeatures), c("featureNum", "featureName"))
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "setnames"
 ```
 
 Subset only measurements for the mean and standard deviation.
@@ -291,27 +224,22 @@ Subset only measurements for the mean and standard deviation.
 dtFeatures <- dtFeatures[grepl("mean\\(\\)|std\\(\\)", featureName)]
 ```
 
-```
-## Error in eval(expr, envir, enclos): objet 'dtFeatures' introuvable
-```
-
 Convert the column numbers to a vector of variable names matching columns in `dt`.
 
 
 ```r
 dtFeatures$featureCode <- dtFeatures[, paste0("V", featureNum)]
-```
-
-```
-## Error in eval(expr, envir, enclos): objet 'dtFeatures' introuvable
-```
-
-```r
 head(dtFeatures)
 ```
 
 ```
-## Error in head(dtFeatures): objet 'dtFeatures' introuvable
+##    featureNum       featureName featureCode
+## 1:          1 tBodyAcc-mean()-X          V1
+## 2:          2 tBodyAcc-mean()-Y          V2
+## 3:          3 tBodyAcc-mean()-Z          V3
+## 4:          4  tBodyAcc-std()-X          V4
+## 5:          5  tBodyAcc-std()-Y          V5
+## 6:          6  tBodyAcc-std()-Z          V6
 ```
 
 ```r
@@ -319,7 +247,13 @@ dtFeatures$featureCode
 ```
 
 ```
-## Error in eval(expr, envir, enclos): objet 'dtFeatures' introuvable
+##  [1] "V1"   "V2"   "V3"   "V4"   "V5"   "V6"   "V41"  "V42"  "V43"  "V44" 
+## [11] "V45"  "V46"  "V81"  "V82"  "V83"  "V84"  "V85"  "V86"  "V121" "V122"
+## [21] "V123" "V124" "V125" "V126" "V161" "V162" "V163" "V164" "V165" "V166"
+## [31] "V201" "V202" "V214" "V215" "V227" "V228" "V240" "V241" "V253" "V254"
+## [41] "V266" "V267" "V268" "V269" "V270" "V271" "V345" "V346" "V347" "V348"
+## [51] "V349" "V350" "V424" "V425" "V426" "V427" "V428" "V429" "V503" "V504"
+## [61] "V516" "V517" "V529" "V530" "V542" "V543"
 ```
 
 Subset these variables using variable names.
@@ -327,18 +261,7 @@ Subset these variables using variable names.
 
 ```r
 select <- c(key(dt), dtFeatures$featureCode)
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "key"
-```
-
-```r
 dt <- dt[, select, with=FALSE]
-```
-
-```
-## Error in eval(expr, envir, enclos): objet 'select' introuvable
 ```
 
 
@@ -350,18 +273,7 @@ Read `activity_labels.txt` file. This will be used to add descriptive names to t
 
 ```r
 dtActivityNames <- fread(file.path(pathIn, "activity_labels.txt"))
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "fread"
-```
-
-```r
 setnames(dtActivityNames, names(dtActivityNames), c("activityNum", "activityName"))
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "setnames"
 ```
 
 
@@ -375,19 +287,11 @@ Merge activity labels.
 dt <- merge(dt, dtActivityNames, by="activityNum", all.x=TRUE)
 ```
 
-```
-## Error in as.data.frame.default(x): impossible de convertir automatiquement la classe  ""function"" en un tableau de données (data.frame)
-```
-
 Add `activityName` as a key.
 
 
 ```r
 setkey(dt, subject, activityNum, activityName)
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "setkey"
 ```
 
 Melt the data table to reshape it from a short and wide format to a tall and narrow format.
@@ -397,19 +301,11 @@ Melt the data table to reshape it from a short and wide format to a tall and nar
 dt <- data.table(melt(dt, key(dt), variable.name="featureCode"))
 ```
 
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "data.table"
-```
-
 Merge activity name.
 
 
 ```r
 dt <- merge(dt, dtFeatures[, list(featureNum, featureCode, featureName)], by="featureCode", all.x=TRUE)
-```
-
-```
-## Error in as.data.frame.default(x): impossible de convertir automatiquement la classe  ""function"" en un tableau de données (data.frame)
 ```
 
 Create a new variable, `activity` that is equivalent to `activityName` as a factor class.
@@ -418,18 +314,7 @@ Create a new variable, `feature` that is equivalent to `featureName` as a factor
 
 ```r
 dt$activity <- factor(dt$activityName)
-```
-
-```
-## Error in dt$activityName: objet de type 'closure' non indiçable
-```
-
-```r
 dt$feature <- factor(dt$featureName)
-```
-
-```
-## Error in dt$featureName: objet de type 'closure' non indiçable
 ```
 
 Seperate features from `featureName` using the helper function `grepthis`.
@@ -443,102 +328,21 @@ grepthis <- function (regex) {
 n <- 2
 y <- matrix(seq(1, n), nrow=n)
 x <- matrix(c(grepthis("^t"), grepthis("^f")), ncol=nrow(y))
-```
-
-```
-## Error in dt$feature: objet de type 'closure' non indiçable
-```
-
-```r
 dt$featDomain <- factor(x %*% y, labels=c("Time", "Freq"))
-```
-
-```
-## Error in factor(x %*% y, labels = c("Time", "Freq")): objet 'x' introuvable
-```
-
-```r
 x <- matrix(c(grepthis("Acc"), grepthis("Gyro")), ncol=nrow(y))
-```
-
-```
-## Error in dt$feature: objet de type 'closure' non indiçable
-```
-
-```r
 dt$featInstrument <- factor(x %*% y, labels=c("Accelerometer", "Gyroscope"))
-```
-
-```
-## Error in factor(x %*% y, labels = c("Accelerometer", "Gyroscope")): objet 'x' introuvable
-```
-
-```r
 x <- matrix(c(grepthis("BodyAcc"), grepthis("GravityAcc")), ncol=nrow(y))
-```
-
-```
-## Error in dt$feature: objet de type 'closure' non indiçable
-```
-
-```r
 dt$featAcceleration <- factor(x %*% y, labels=c(NA, "Body", "Gravity"))
-```
-
-```
-## Error in factor(x %*% y, labels = c(NA, "Body", "Gravity")): objet 'x' introuvable
-```
-
-```r
 x <- matrix(c(grepthis("mean()"), grepthis("std()")), ncol=nrow(y))
-```
-
-```
-## Error in dt$feature: objet de type 'closure' non indiçable
-```
-
-```r
 dt$featVariable <- factor(x %*% y, labels=c("Mean", "SD"))
-```
-
-```
-## Error in factor(x %*% y, labels = c("Mean", "SD")): objet 'x' introuvable
-```
-
-```r
 ## Features with 1 category
 dt$featJerk <- factor(grepthis("Jerk"), labels=c(NA, "Jerk"))
-```
-
-```
-## Error in dt$feature: objet de type 'closure' non indiçable
-```
-
-```r
 dt$featMagnitude <- factor(grepthis("Mag"), labels=c(NA, "Magnitude"))
-```
-
-```
-## Error in dt$feature: objet de type 'closure' non indiçable
-```
-
-```r
 ## Features with 3 categories
 n <- 3
 y <- matrix(seq(1, n), nrow=n)
 x <- matrix(c(grepthis("-X"), grepthis("-Y"), grepthis("-Z")), ncol=nrow(y))
-```
-
-```
-## Error in dt$feature: objet de type 'closure' non indiçable
-```
-
-```r
 dt$featAxis <- factor(x %*% y, labels=c(NA, "X", "Y", "Z"))
-```
-
-```
-## Error in factor(x %*% y, labels = c(NA, "X", "Y", "Z")): objet 'x' introuvable
 ```
 
 Check to make sure all possible combinations of `feature` are accounted for by all possible combinations of the factor class variables.
@@ -546,26 +350,12 @@ Check to make sure all possible combinations of `feature` are accounted for by a
 
 ```r
 r1 <- nrow(dt[, .N, by=c("feature")])
-```
-
-```
-## Error in nrow(dt[, .N, by = c("feature")]): objet '.N' introuvable
-```
-
-```r
 r2 <- nrow(dt[, .N, by=c("featDomain", "featAcceleration", "featInstrument", "featJerk", "featMagnitude", "featVariable", "featAxis")])
-```
-
-```
-## Error in nrow(dt[, .N, by = c("featDomain", "featAcceleration", "featInstrument", : objet '.N' introuvable
-```
-
-```r
 r1 == r2
 ```
 
 ```
-## Error in eval(expr, envir, enclos): objet 'r1' introuvable
+## [1] TRUE
 ```
 
 Yes, I accounted for all possible combinations. `feature` is now redundant.
@@ -580,18 +370,7 @@ Create a data set with the average of each variable for each activity and each s
 
 ```r
 setkey(dt, subject, activity, featDomain, featAcceleration, featInstrument, featJerk, featMagnitude, featVariable, featAxis)
-```
-
-```
-## Error in eval(expr, envir, enclos): impossible de trouver la fonction "setkey"
-```
-
-```r
 dtTidy <- dt[, list(count = .N, average = mean(value)), by=key(dt)]
-```
-
-```
-## Error in eval(expr, envir, enclos): objet '.N' introuvable
 ```
 
 Make codebook.
