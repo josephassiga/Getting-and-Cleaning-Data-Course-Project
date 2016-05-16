@@ -1,6 +1,6 @@
 run_analysis
 ============
-Last updated 2016-05-16 01:35:45 using R version 3.2.4 (2016-03-10).
+Last updated 2016-05-16 10:03:57 using R version 3.2.4 (2016-03-10).
 
 
 Instructions for project
@@ -38,25 +38,6 @@ Load packages.
 ```r
 packages <- c("data.table", "reshape2")
 sapply(packages, require, character.only=TRUE, quietly=TRUE)
-```
-
-```
-## data.table 1.9.6  For help type ?data.table or https://github.com/Rdatatable/data.table/wiki
-```
-
-```
-## The fastest way to learn (by data.table authors): https://www.datacamp.com/courses/data-analysis-the-data-table-way
-```
-
-```
-## 
-## Attachement du package : 'reshape2'
-```
-
-```
-## The following objects are masked from 'package:data.table':
-## 
-##     dcast, melt
 ```
 
 ```
@@ -381,23 +362,9 @@ knit("makeCodebook.Rmd", output="codebook.md", encoding="ISO8859-1", quiet=TRUE)
 ```
 
 ```
-## Warning in readLines(if (is.character(input2)) {: impossible d'ouvrir le
-## fichier 'makeCodebook.Rmd' : No such file or directory
-```
-
-```
-## Error in readLines(if (is.character(input2)) {: impossible d'ouvrir la connexion
+## [1] "codebook.md"
 ```
 
 ```r
 markdownToHTML("codebook.md", "codebook.html")
-```
-
-```
-## Warning in readLines(con): impossible d'ouvrir le fichier 'codebook.md' :
-## No such file or directory
-```
-
-```
-## Error in readLines(con): impossible d'ouvrir la connexion
 ```
